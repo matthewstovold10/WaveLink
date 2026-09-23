@@ -1,11 +1,23 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 header,
 main {
   padding-left: 16px;
   padding-right: 16px;
 }
 
+html {
+  background: #dfe6f0;
+}
+
 body {
-  margin: 0;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
   background: linear-gradient(180deg, #e8f0fb 0%, #f4f7fb 130px);
   font-family:
     "Manrope",
@@ -718,8 +730,10 @@ header {
 
 .tab-bar {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
   bottom: 0;
   display: flex;
   height: 45px;
@@ -758,6 +772,7 @@ header {
 }
 
 .sheet {
+  max-width: 430px;
   box-sizing: border-box;
   width: 100%;
   max-width: none;
