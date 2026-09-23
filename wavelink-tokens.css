@@ -1,0 +1,68 @@
+/* WaveLink design tokens
+   Drop this in first, then use var(--wl-*) everywhere. */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  /* --- brand ------------------------------------------------------ */
+  --wl-blue:        #1558E0;  /* primary accent, buttons, active nav   */
+  --wl-blue-dark:   #0F47B8;  /* pressed / link hover                  */
+  --wl-blue-light:  #6BA1F2;  /* secondary stroke in the logo mark     */
+  --wl-blue-tint:   #EEF4FE;  /* tinted fills behind blue text         */
+  --wl-navy:        #123A7A;  /* the wordmark                          */
+
+  /* --- ink & ground ----------------------------------------------- */
+  --wl-ink:         #0A1B33;  /* primary text                          */
+  --wl-ink-2:       #34465F;  /* secondary text                        */
+  --wl-ink-3:       #5A6C85;  /* captions and labels (4.5:1 on white)  */
+  --wl-line:        #E4E9F0;  /* borders                               */
+  --wl-line-soft:   #EDF1F6;  /* dividers inside cards                 */
+  --wl-bg:          #F4F7FB;  /* app background                        */
+  --wl-bg-header:   #EAF1FC;  /* header wash                           */
+  --wl-surface:     #FFFFFF;  /* cards                                 */
+  --wl-fill:        #F4F7FB;  /* metric tiles inside cards             */
+
+  /* --- condition indicators --------------------------------------- */
+  --wl-good:        #0B7A53;
+  --wl-good-bg:     #E6F4EE;
+  --wl-moderate:    #9A5B00;
+  --wl-moderate-bg: #FBF0DE;
+  --wl-poor:        #C0392B;
+  --wl-poor-bg:     #FBEAE7;
+  --wl-nodata:      #94A3B8;
+  --wl-nodata-bg:   #EDF1F6;
+
+  /* --- avatar palette (white text sits on all of these) ----------- */
+  --wl-av-1: #1558E0;
+  --wl-av-2: #0E7C86;
+  --wl-av-3: #5B49C9;
+  --wl-av-4: #0B7A53;
+  --wl-av-5: #B2543B;
+  --wl-av-6: #2B6CB0;
+  --wl-av-7: #7A5AF8;
+  --wl-av-8: #C2410C;
+
+  /* --- map ---------------------------------------------------------*/
+  --wl-sea:         #CFE3F6;
+  --wl-land:        #E9EEE7;
+  --wl-coast:       #BED2B9;
+  --wl-road:        #F7F9F5;
+
+  /* --- type --------------------------------------------------------*/
+  --wl-font-ui:      'Manrope', -apple-system, 'Segoe UI', sans-serif;
+  --wl-font-figures: 'Space Grotesk', 'Space Mono', ui-monospace, sans-serif;
+
+  /* --- radius ------------------------------------------------------*/
+  --wl-r-sm:  8px;   /* status pills, small chips      */
+  --wl-r-md:  12px;  /* metric tiles, buttons in rows  */
+  --wl-r-lg:  16px;  /* standard cards                 */
+  --wl-r-xl:  18px;  /* prominent cards                */
+  --wl-r-sheet: 26px;/* bottom sheets (top corners)    */
+
+  /* --- elevation ---------------------------------------------------*/
+  --wl-shadow-card:  0 1px 2px rgba(10,27,51,.05), 0 6px 16px -12px rgba(10,27,51,.2);
+  --wl-shadow-raise: 0 1px 2px rgba(10,27,51,.06), 0 8px 22px -14px rgba(10,27,51,.22);
+  --wl-shadow-float: 0 3px 12px rgba(10,27,51,.2);
+  --wl-shadow-sheet: 0 -8px 40px rgba(6,18,34,.3);
+  --wl-shadow-blue:  0 6px 16px -6px rgba(21,88,224,.65);
+}

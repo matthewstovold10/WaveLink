@@ -1,0 +1,577 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <title>Wave Link</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1 viewport-fit=cover"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="motion.css" />
+    <link rel="icon" href="assets/logo/favicon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      href="assets/logo/favicon/favicon.svg"
+      type="image/svg+xml"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="assets/logo/favicon/apple-touch-icon.png"
+    />
+  </head>
+  <body>
+    <div class="splash" id="splash" aria-hidden="true">
+      <div class="splash-word">
+        <span style="--i: 0">w</span><span style="--i: 1">a</span
+        ><span style="--i: 2">v</span><span style="--i: 3">e</span
+        ><span class="blue" style="--i: 4">l</span
+        ><span class="blue" style="--i: 5">i</span
+        ><span class="blue" style="--i: 6">n</span
+        ><span class="blue" style="--i: 7">k</span>
+      </div>
+      <p class="splash-caption">Checking conditions near you</p>
+    </div>
+    <header>
+      <a href="index.html" class="brand" aria-label="wavelink">
+        <span class="brand-w" aria-hidden="true"
+          ><span class="brand-w-letter">w</span
+          ><svg class="brand-wave" viewBox="0 0 33 20">
+            <path
+              pathLength="1"
+              d="M3 13c4.5-6.5 9-6.5 13.5 0s9 6.5 13.5 0"
+            /></svg></span
+        ><span class="brand-rest" aria-hidden="true"
+          >ave<span class="brand-link">link</span></span
+        >
+      </a>
+      <img
+        class="search-icon-header"
+        alt="Search Icon"
+        src="assets/icons/ui/search.svg"
+      />
+      <img class="bell" alt="Bell Icon" src="assets/icons/ui/bell.svg" />
+      <span class="avatar">MS</span>
+    </header>
+    <main>
+      <!--<div class="search-bar">
+        <img src="assets/icons/ui/search.svg" class="search-icon" alt="" />
+        <label for="spot-search" class="visually-hidden"
+          >Search spots, people or activities</label
+        >
+        <input
+          id="spot-search"
+          type="search"
+          placeholder="Search spots, people or activities"
+        />
+      </div>-->
+      <div class="checked-banner" id="checked-banner" hidden>
+        <span class="checked-dot"></span>
+        <div class="checked-text">
+          <span class="checked-title">You're at Beadnell Bay</span>
+          <span class="checked-sub" id="checked-sub"
+            >Wingfoiling · until 18:30</span
+          >
+        </div>
+        <button type="button" class="checked-out" id="check-out-button">
+          Check out
+        </button>
+      </div>
+      <section class="condition-near">
+        <div class="condition-near-title">
+          <img
+            alt=""
+            src="assets/icons/nav/map-blue.svg"
+            class="condition-near-icon"
+          />
+          <span class="location">Beadnell Bay</span>
+          <span class="time">Now 14:20</span>
+        </div>
+        <div class="hero-main">
+          <div class="hero-wind">
+            <span class="hero-number" id="hero-value">23</span>
+            <div class="hero-unit">
+              <span id="hero-unit">mph</span>
+              <span class="hero-dir" id="hero-dir">SE</span>
+            </div>
+          </div>
+          <div class="hero-gusts">
+            <span class="hero-gusts-label" id="hero-sec-label">Gusts</span>
+            <span class="hero-gusts-value" id="hero-sec-value">27</span>
+          </div>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <span class="spot-label">Wave</span>
+            <span class="spot-value">0.7 m</span>
+          </div>
+          <div class="hero-metric">
+            <span class="spot-label">Period</span>
+            <span class="spot-value">6 s</span>
+          </div>
+          <div class="hero-metric">
+            <span class="spot-label">Tide</span>
+            <span class="spot-value">Rising</span>
+          </div>
+          <div class="hero-metric">
+            <span class="spot-label">Water</span>
+            <span class="spot-value">14°</span>
+          </div>
+        </div>
+        <div class="condition-near-description">
+          <span class="dot dot--good"></span>
+          <!--<span class="description"
+            >Steady SE, cross-on at the north end - 4.5 m weather</span
+          >-->
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="check-in-button">
+            <img src="assets/icons/ui/check-in-white.svg" alt="" />
+            Check in here
+          </button>
+          <button
+            type="button"
+            class="cam-button"
+            id="photo-button"
+            aria-label="Post a spot report"
+          >
+            <img src="assets/icons/ui/camera-blue.svg" alt="" />
+          </button>
+
+          <input
+            type="file"
+            id="photo-input"
+            accept="image/*,video/*"
+            capture="environment"
+            class="visually-hidden"
+          />
+        </div>
+      </section>
+      <fieldset class="sport-picker">
+        <!--<legend>Condition For</legend>-->
+        <div class="pills">
+          <input type="radio" id="wing" name="activity" value="wing" checked />
+          <label for="wing">
+            <img alt="Wing Icon" src="assets/icons/activity/wing.svg" />
+            Wing
+          </label>
+
+          <input type="radio" id="surf" name="activity" value="surf" />
+          <label for="surf">
+            <img alt="Surf Icon" src="assets/icons/activity/surf.svg" />
+            Surf
+          </label>
+
+          <input type="radio" id="kite" name="activity" value="kite" />
+          <label for="kite">
+            <img alt="Kite Icon" src="assets/icons/activity/kite.svg" />
+            Kite
+          </label>
+
+          <input type="radio" id="sup" name="activity" value="sup" />
+          <label for="sup">
+            <img alt="Sup Icon" src="assets/icons/activity/sup.svg" />
+            SUP
+          </label>
+
+          <input type="radio" id="kayak" name="activity" value="kayak" />
+          <label for="kayak">
+            <img alt="Kayak Icon" src="assets/icons/activity/kayak.svg" />
+            Kayak
+          </label>
+        </div>
+      </fieldset>
+      <section class="out-right-now">
+        <div class="out-now-title">
+          <h3 class="out-right-now-title">Out right now</h3>
+          <a href="#" class="out-now-see-all">See all</a>
+        </div>
+        <div class="out-now-container">
+          <div class="out-now-container-title">
+            <span class="dot"></span>
+            <span class="friends-count"
+              ><b id="friend-total">6</b> friends on the water</span
+            >
+            <span class="spots-count"
+              >across <b id="spot-total">3</b> spots</span
+            >
+          </div>
+          <div class="friend-tiles">
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #1558e0">
+                KA
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/wing.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">Kevin.A</span>
+              <span class="friend-status">Beadnell<br />until 18:30</span>
+            </a>
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #e04f15">
+                PJ
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/surf.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">Pete.J</span>
+              <span class="friend-status">Beadnell<br />posted photo</span>
+            </a>
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #7a15e0">
+                JL
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/wing.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">James.L</span>
+              <span class="friend-status">Beadnell<br />1 hrs in</span>
+            </a>
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #0e7c86">
+                TL
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/sup.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">Tadek.L</span>
+              <span class="friend-status">Tynemouth<br />until 17:00</span>
+            </a>
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #eae610">
+                WH
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/wing.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">Will.H</span>
+              <span class="friend-status">Bambaurgh<br />until 17:00</span>
+            </a>
+            <a href="#" class="friend-tile">
+              <span class="friend-avatar" style="background: #10b7ea">
+                GS
+                <img
+                  class="friend-badge"
+                  src="assets/icons/activity/wing.svg"
+                  alt=""
+                />
+              </span>
+              <span class="friend-name">Glen.S</span>
+              <span class="friend-status">Beadnell<br />8 hrs in</span>
+            </a>
+            <a href="#" class="add-friend">
+              <span class="friend-avatar" style="background: #828282ff">
+                +
+              </span>
+              <span class="friend-name">Add Friends</span>
+            </a>
+          </div>
+
+          <div class="out-now-lower">
+            <span class="people-out"
+              ><b id="people-total">22</b> people out at your spots</span
+            >
+            <a href="#" class="busiest">
+              Busiest: <b id="busiest-spot">Tynemouth (9)</b>
+              <img src="assets/icons/ui/chevron-right-blue.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </section>
+      <section class="favourite-spots">
+        <div class="favourite-spots-heading">
+          <h3 class="favourite-spots-title">Favourite spots</h3>
+          <a href="#" class="favourite-spots-edit">Edit</a>
+        </div>
+        <div class="favourite-tiles">
+          <a href="site.html" class="favourite-tile" data-spot="beadnell">
+            <div class="spot-upper">
+              <span class="spot-name">Beadnell Bay</span>
+              <span class="spot-verdict verdict--good">Good</span>
+              <span class="spot-dist">6 mi</span>
+            </div>
+            <div class="fav-metrics">
+              <div class="fav-metric">
+                <span class="spot-label">Wind</span>
+                <span class="spot-value spot-wind">23 SE</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Wave</span>
+                <span class="spot-value spot-wave">0.7m</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Water</span>
+                <span class="spot-value spot-water">14°</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Tide</span>
+                <span class="spot-value spot-tide">Rising</span>
+              </div>
+            </div>
+            <div class="spot-lower">
+              <div class="spot-avatars">
+                <span class="mini-avatar" style="background: #1558e0">KA</span>
+                <span class="mini-avatar" style="background: #e04f15">PJ</span>
+                <span class="mini-avatar" style="background: #5b49c9">JL</span>
+                <span class="mini-more">+4</span>
+              </div>
+              <span class="spot-here">7 here now · 3 friends</span>
+              <img src="assets/icons/ui/chevron-right-blue.svg" alt="" />
+            </div>
+          </a>
+          <a href="#" class="favourite-tile" data-spot="budle bay">
+            <div class="spot-upper">
+              <span class="spot-name">Budle Bay</span>
+              <span class="spot-verdict verdict--moderate">Light</span>
+              <span class="spot-dist">14 mi</span>
+            </div>
+            <div class="fav-metrics">
+              <div class="fav-metric">
+                <span class="spot-label">Wind</span>
+                <span class="spot-value spot-wind">13 SE</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Wave</span>
+                <span class="spot-value spot-wave">0.4m</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Water</span>
+                <span class="spot-value spot-water">14°</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Tide</span>
+                <span class="spot-value spot-tide">Rising</span>
+              </div>
+            </div>
+            <div class="spot-lower">
+              <div class="spot-avatars">
+                <span class="mini-avatar" style="background: #0e7c86">PJ</span>
+                <span class="mini-avatar" style="background: #1558e0">KA</span>
+              </div>
+              <span class="spot-here">2 here now · 1 friends</span>
+              <img src="assets/icons/ui/chevron-right-blue.svg" alt="" />
+            </div>
+          </a>
+          <a href="#" class="favourite-tile" data-spot="seaburn">
+            <div class="spot-upper">
+              <span class="spot-name">Seaburn</span>
+              <span class="spot-verdict verdict--good">Good</span>
+              <span class="spot-dist">38 mi</span>
+            </div>
+            <div class="fav-metrics">
+              <div class="fav-metric">
+                <span class="spot-label">Wind</span>
+                <span class="spot-value spot-wind">18 SE</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Wave</span>
+                <span class="spot-value spot-wave">0.3m</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Water</span>
+                <span class="spot-value spot-water">14°</span>
+              </div>
+              <div class="fav-metric">
+                <span class="spot-label">Tide</span>
+                <span class="spot-value spot-tide">Rising</span>
+              </div>
+            </div>
+            <div class="spot-lower">
+              <div class="spot-avatars">
+                <span class="mini-avatar" style="background: #e04f15">KA</span>
+                <span class="mini-avatar" style="background: #5b49c9">JL</span>
+                <span class="mini-avatar" style="background: #0e7c86">PJ</span>
+              </div>
+              <span class="spot-here">3 here now</span>
+              <img src="assets/icons/ui/chevron-right-blue.svg" alt="" />
+            </div>
+          </a>
+        </div>
+      </section>
+      <nav class="tab-bar">
+        <a href="index.html" class="tab is-active">
+          <img src="assets/icons/nav/home-blue.svg" alt="" />
+          Home
+        </a>
+        <a href="map.html" class="tab">
+          <img src="assets/icons/nav/map.svg" alt="" />
+          Map
+        </a>
+        <a href="friends.html" class="tab">
+          <img src="assets/icons/nav/friends.svg" alt="" />
+          Friends
+        </a>
+        <a href="profile.html" class="tab">
+          <img src="assets/icons/nav/profile.svg" alt="" />
+          Profile
+        </a>
+      </nav>
+    </main>
+
+    <dialog class="sheet" id="check-in-sheet">
+      <span class="sheet-grabber"></span>
+
+      <div class="sheet-head">
+        <div>
+          <h2>I'm at Beadnell Bay</h2>
+          <p class="sheet-sub">23 mph SE · gusts 27 · 0.7 m · water 14°</p>
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Activity</span>
+        <div class="pills">
+          <input
+            type="radio"
+            id="ci-wing"
+            name="ci-activity"
+            value="wing"
+            checked
+          />
+          <label for="ci-wing"
+            ><img alt="" src="assets/icons/activity/wing.svg" />Wing</label
+          >
+
+          <input type="radio" id="ci-surf" name="ci-activity" value="surf" />
+          <label for="ci-surf"
+            ><img alt="" src="assets/icons/activity/surf.svg" />Surf</label
+          >
+
+          <input type="radio" id="ci-kite" name="ci-activity" value="kite" />
+          <label for="ci-kite"
+            ><img alt="" src="assets/icons/activity/kite.svg" />Kite</label
+          >
+
+          <input type="radio" id="ci-sup" name="ci-activity" value="sup" />
+          <label for="ci-sup"
+            ><img alt="" src="assets/icons/activity/sup.svg" />SUP</label
+          >
+
+          <input type="radio" id="ci-kayak" name="ci-activity" value="kayak" />
+          <label for="ci-kayak"
+            ><img alt="" src="assets/icons/activity/kayak.svg" />Kayak</label
+          >
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Until</span>
+        <div class="until-display">
+          <img src="assets/icons/ui/clock-blue.svg" alt="" />
+          <span class="until-time" id="until-time">18:30</span>
+          <span class="until-note" id="until-note">about 4 hrs</span>
+        </div>
+        <div class="until-chips">
+          <input type="radio" id="u1" name="until" value="1" />
+          <label for="u1">1 hr</label>
+
+          <input type="radio" id="u2" name="until" value="2" />
+          <label for="u2">2 hrs</label>
+
+          <input type="radio" id="u4" name="until" value="4" checked />
+          <label for="u4">4 hrs</label>
+
+          <input type="radio" id="u0" name="until" value="open" />
+          <label for="u0">Open</label>
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Visible to</span>
+        <div class="visibility">
+          <input
+            type="radio"
+            id="vis-friends"
+            name="visibility"
+            value="friends"
+            checked
+          />
+          <label for="vis-friends"
+            ><img
+              src="assets/icons/nav/friends-blue.svg"
+              alt=""
+            />Friends</label
+          >
+
+          <input
+            type="radio"
+            id="vis-everyone"
+            name="visibility"
+            value="everyone"
+          />
+          <label for="vis-everyone"
+            ><img src="assets/icons/nav/profile.svg" alt="" />Everyone
+            here</label
+          >
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary">Check in</button>
+      <button type="button" id="sheet-close">Cancel</button>
+    </dialog>
+    <dialog class="sheet" id="done-sheet">
+      <span class="sheet-grabber"></span>
+
+      <div class="done-top">
+        <span class="done-tick">
+          <img src="assets/icons/ui/check-green.svg" alt="" />
+        </span>
+        <h2>You're checked in</h2>
+        <p class="sheet-sub" id="done-sub">
+          Beadnell Bay · wingfoiling until 18:30
+        </p>
+      </div>
+
+      <div class="done-friends">
+        <div class="spot-avatars">
+          <span class="mini-avatar" style="background: #1558e0">KA</span>
+          <span class="mini-avatar" style="background: #e04f15">PJ</span>
+          <span class="mini-avatar" style="background: #5b49c9">JL</span>
+        </div>
+        <div class="checked-text">
+          <span class="checked-title">3 friends can see you're here</span>
+          <span class="sheet-note">They'll get an alert if they're nearby</span>
+        </div>
+      </div>
+      <div class="done-lower">
+        <button
+          type="button"
+          class="cam-button"
+          id="report-photo-button"
+          aria-label="Post a spot report"
+        >
+          Post a report
+          <img src="assets/icons/ui/camera-blue.svg" alt="" />
+        </button>
+
+        <input
+          type="file"
+          id="report-photo-input"
+          accept="image/*,video/*"
+          capture="environment"
+          class="visually-hidden"
+        />
+        <button type="button" class="btn-primary" id="done-close">Done</button>
+      </div>
+    </dialog>
+    <script src="script.js"></script>
+    <script src="motion.js"></script>
+  </body>
+</html>

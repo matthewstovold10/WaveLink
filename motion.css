@@ -1,0 +1,247 @@
+/* ==========================================================
+   wavelink motion
+   Link this AFTER style.css:  <link rel="stylesheet" href="motion.css" />
+   ========================================================== */
+
+/* ---------- the header wordmark ---------- */
+
+header {
+  position: relative; /* a normal part of the page: it scrolls away straight away */
+  z-index: 50;
+  padding-top: env(safe-area-inset-top);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: flex-start;
+  font-family:
+    "Manrope",
+    -apple-system,
+    sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: #0a1b33;
+  text-decoration: none;
+}
+
+.brand-link {
+  color: #1558e0;
+}
+
+/* the w, and the wave it turns into */
+.brand-w {
+  position: relative;
+  display: inline-block;
+}
+
+.brand-w-letter {
+  display: inline-block;
+  transform-origin: 50% 60%;
+  transition:
+    opacity 0.3s ease 0.1s,
+    transform 0.4s cubic-bezier(0.65, 0, 0.35, 1) 0.1s;
+}
+
+.brand-wave {
+  position: absolute;
+  left: 50%;
+  top: 0.24em;
+  width: 0.86em;
+  height: 0.52em;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+.brand-wave path {
+  fill: none;
+  stroke: #1558e0;
+  stroke-width: 4.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.45s cubic-bezier(0.3, 0.6, 0.2, 1);
+}
+
+/* "avelink" folds away */
+.brand-rest {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 3.3em;
+  transition:
+    max-width 0.55s cubic-bezier(0.65, 0, 0.35, 1) 0.25s,
+    opacity 0.4s ease 0.3s;
+}
+
+/* ---------- scrolled: fold "avelink" away, then turn the w into a wave ----------
+   Going down: the letters fold first (0–0.55s), then the w becomes a wave (from 0.3s).
+   Coming back up: it plays in reverse — wave first, then the letters return. */
+header.is-condensed .brand-rest {
+  max-width: 0;
+  opacity: 0;
+  transition-delay: 0s, 0s;
+}
+
+header.is-condensed .brand-w-letter {
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition-delay: 0.3s, 0.3s;
+}
+
+header.is-condensed .brand-wave path {
+  stroke-dashoffset: 0;
+  transition-delay: 0.35s;
+}
+
+/* ---------- the splash ---------- */
+
+body.is-splashing {
+  overflow: hidden;
+} /* no scrolling behind the splash */
+body.is-splashing .brand {
+  opacity: 0;
+} /* the splash word lands here, so hide the real one */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash::before {
+  /* the background, on its own layer so it can fade */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #e8f0fb 0%, #f4f7fb 45%);
+  transition: opacity 0.5s ease 0.15s;
+}
+
+.splash-word {
+  position: relative;
+  display: flex;
+  font-family:
+    "Manrope",
+    -apple-system,
+    sans-serif;
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: #0a1b33;
+  transform-origin: 0 0;
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.splash-word .blue {
+  color: #1558e0;
+}
+
+/* 1. letters rise in, 55ms apart   2. a swell rolls through the name */
+.splash-word span {
+  display: inline-block;
+  opacity: 0;
+  animation:
+    rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards,
+    swell 0.8s cubic-bezier(0.45, 0, 0.3, 1);
+  animation-delay: calc(var(--i) * 55ms), calc(0.7s + var(--i) * 55ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swell {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-0.18em);
+  }
+  70% {
+    transform: translateY(0.04em);
+  }
+}
+
+.splash-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 70px;
+  margin: 0;
+  text-align: center;
+  font-family:
+    "Manrope",
+    -apple-system,
+    sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #5a6c85;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+/* 3. still loading: the swell keeps rolling and the caption appears */
+.splash.is-loading .splash-word span {
+  opacity: 1;
+  animation: swell-loop 1.2s cubic-bezier(0.45, 0, 0.3, 1) infinite;
+  animation-delay: calc(var(--i) * 55ms);
+}
+
+@keyframes swell-loop {
+  0%,
+  67%,
+  100% {
+    transform: translateY(0);
+  }
+  23% {
+    transform: translateY(-0.18em);
+  }
+  47% {
+    transform: translateY(0.04em);
+  }
+}
+
+.splash.is-loading .splash-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 4. the word flies up into the header (motion.js sets the exact transform) */
+.splash.is-docking .splash-word span {
+  opacity: 1;
+  animation: none;
+}
+
+.splash.is-docking::before,
+.splash.is-docking .splash-caption {
+  opacity: 0;
+}
+
+/* ---------- Reduce Motion: no animation, just the content ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .splash-word span {
+    animation: none;
+    opacity: 1;
+  }
+  .splash-word,
+  .splash::before {
+    transition: none;
+  }
+}
