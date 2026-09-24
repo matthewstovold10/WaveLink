@@ -12,15 +12,18 @@ function closeSheet() {
   sheet.close();
 }
 
-openBtn.addEventListener("click", openSheet);
-closeBtn.addEventListener("click", closeSheet);
-
-sheet.addEventListener("click", (e) => {
-  if (e.target === sheet) closeSheet();
+openBtn.addEventListener("click", () => {
+  sheet.showModal();
+  document.body.classList.add("sheet-open");
+  closeBtn.addEventListener("click", closeSheet);
 });
 
 sheet.addEventListener("close", () => {
   document.body.classList.remove("sheet-open");
+});
+
+sheet.addEventListener("click", (e) => {
+  if (e.target === sheet) closeSheet();
 });
 
 confirmBtn.addEventListener("click", () => {
@@ -88,22 +91,84 @@ const ACTIVITY_NAMES = {
   kayak: "kayaking",
 };
 
+const CHECKIN_KEY = "wl-checkin";
+
+const SPOT_NAMES = {
+  beadnell: "Beadnell Bay",
+  budle: "Budle Bay",
+  seaburn: "Seaburn",
+};
+
+const PAGE_SPOT_KEY = document.body.dataset.spot || "beadnell";
+const PAGE_SPOT_NAME = SPOT_NAMES[PAGE_SPOT_KEY] || "this spot";
+
 function checkIn(activity, until) {
   const name = ACTIVITY_NAMES[activity];
   const when = until === "open" ? "" : ` until ${timeEl.textContent}`;
 
-  doneSub.textContent = `Beadnell Bay · ${name}${when}`;
-  doneSheet.showModal();
-  document.body.classList.add("sheet-open");
+  let endsAt = null;
+  if (until !== "open") {
+    const end = new Date(Date.now() + Number(until) * 60 * 60 * 1000);
+    end.setMinutes(Math.ceil(end.getMinutes() / 15) * 15, 0, 0);
+    endsAt = end.getTime();
+  }
 
-  bannerSub.textContent =
-    name[0].toUpperCase() + name.slice(1) + (when ? " ·" + when : "");
-  banner.hidden = false;
+  const record = {
+    spotKey: PAGE_SPOT_KEY,
+    spotName: PAGE_SPOT_NAME,
+    activity: activity,
+    label: name[0].toUpperCase() + name.slice(1) + (when ? " ·" + when : ""),
+    endsAt: endsAt,
+  };
+
+  localStorage.setItem(CHECKIN_KEY, JSON.stringify(record));
+
+  if (doneSheet && doneSub) {
+    doneSub.textContent = `${PAGE_SPOT_NAME} · ${name}${when}`;
+    doneSheet.showModal();
+    document.body.classList.add("sheet-open");
+  }
+
+  showBanner(record);
 }
 
 function checkOut() {
-  banner.hidden = true;
+  localStorage.removeItem(CHECKIN_KEY);
+  if (banner) banner.hidden = true;
 }
+
+function showBanner(record) {
+  if (!banner) return;
+
+  const title = banner.querySelector(".checked-title");
+  if (title) title.textContent = `You're at ${record.spotName}`;
+  if (bannerSub) bannerSub.textContent = record.label;
+
+  banner.hidden = false;
+}
+
+function loadCheckIn() {
+  const raw = localStorage.getItem(CHECKIN_KEY);
+  if (!raw) return null;
+
+  let record;
+  try {
+    record = JSON.parse(raw);
+  } catch {
+    localStorage.removeItem(CHECKIN_KEY);
+    return null;
+  }
+
+  if (record.endsAt && Date.now() > record.endsAt) {
+    localStorage.removeItem(CHECKIN_KEY);
+    return null;
+  }
+
+  return record;
+}
+
+const saved = loadCheckIn();
+if (saved) showBanner(saved);
 
 doneClose.addEventListener("click", () => doneSheet.close());
 doneSheet.addEventListener("close", () =>
@@ -160,6 +225,7 @@ function setupPhotoPicker(buttonId, inputId) {
 
 setupPhotoPicker("photo-button", "photo-input");
 setupPhotoPicker("report-photo-button", "report-photo-input");
+setupPhotoPicker("photo-button-site", "photo-input-site");
 
 const SPOTS = {
   beadnell: {
@@ -260,8 +326,8 @@ const ACTIVITIES = {
       secValue: s.gust,
     }),
     metrics: (s) => [
-      ["Kite", s.wind >= 20 ? "8 m" : "10 m"],
       ["Wave", s.wave + " m"],
+      ["Period", s.period + " s"],
       ["Tide", s.tide],
       ["Water", s.water + "°"],
     ],

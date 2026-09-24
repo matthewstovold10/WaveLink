@@ -21,15 +21,265 @@
       rel="apple-touch-icon"
       href="assets/logo/favicon/apple-touch-icon.png"
     />
+    <meta name="theme-color" content="#eaf1fc" />
   </head>
 
-  <body>
-    <header>
+  <body data-spot="beadnell">
+    <header class="site-header">
       <a href="index.html" class="back-home-arrow">
         <img src="assets/icons/ui/chevron-left-blue.svg" alt="" />
       </a>
-      <h2>Beadnell Bay</h2>
+      <h2 class="header-site-location">Beadnell Bay</h2>
     </header>
-    <main></main>
+    <main>
+      <div class="checked-banner" id="checked-banner" hidden>
+        <span class="checked-dot"></span>
+        <div class="checked-text">
+          <span class="checked-title">You're at Beadnell Bay</span>
+          <span class="checked-sub" id="checked-sub"
+            >Wingfoiling · until 18:30</span
+          >
+        </div>
+        <button type="button" class="checked-out" id="check-out-button">
+          Check out
+        </button>
+      </div>
+      <section class="condition-near-site">
+        <div class="condition-near-title">
+          <img
+            alt=""
+            src="assets/icons/nav/map-blue.svg"
+            class="condition-near-icon"
+          />
+          <span class="location">Current Conditions</span>
+          <span class="time">Now 14:20</span>
+        </div>
+        <div class="hero-main">
+          <div class="hero-wind">
+            <span class="hero-number" id="hero-value">23</span>
+            <div class="hero-unit">
+              <span id="hero-unit">mph</span>
+              <span class="hero-dir" id="hero-dir">SE</span>
+            </div>
+          </div>
+          <div class="hero-gusts">
+            <span class="hero-gusts-label" id="hero-sec-label">Gusts</span>
+            <span class="hero-gusts-value" id="hero-sec-value">27</span>
+          </div>
+        </div>
+
+        <div class="hero-metrics-site">
+          <div class="hero-metric-site">
+            <div class="hero-metric-site-big">
+              <span class="spot-label">Wave</span>
+              <span class="spot-value">0.7 m</span>
+            </div>
+            <div class="hero-metric-site-small">
+              <span class="spot-label-site">Period</span>
+              <span class="spot-value-site">6s</span>
+            </div>
+          </div>
+          <div class="hero-metric-site">
+            <div class="hero-metric-site-big">
+              <span class="spot-label">Tide</span>
+              <span class="spot-value">Rising</span>
+            </div>
+            <div class="hero-metric-site-small">
+              <span class="spot-label-site">High 15:42</span>
+              <span class="spot-value-site">4.1 m</span>
+            </div>
+          </div>
+          <div class="hero-metric-site">
+            <div class="hero-metric-site-big">
+              <span class="spot-label">Temp</span>
+              <span class="spot-value">15°/14°</span>
+            </div>
+            <div class="hero-metric-site-small">
+              <span class="spot-label-site">Air/Water</span>
+              <span class="spot-value-site"></span>
+            </div>
+          </div>
+        </div>
+        <div class="lower-weather">
+          <img src="assets/icons/ui/sun-grey.svg" alt="" />
+          <span class="weather-desc-1">Bright spells</span>
+          <span class="weather-desc-2">16°C</span>
+          <span class="weather-desc-3">Sunset 19:48</span>
+        </div>
+      </section>
+      <div class="hero-actions">
+        <button type="button" class="check-in-button">
+          <img src="assets/icons/ui/check-in-white.svg" alt="" />
+          Check in
+        </button>
+        <button
+          type="button"
+          class="cam-button"
+          id="photo-button-site"
+          aria-label="Post a spot report"
+        >
+          <img src="assets/icons/ui/camera-blue.svg" alt="" />
+        </button>
+
+        <input
+          type="file"
+          id="photo-input-site"
+          accept="image/*,video/*"
+          capture="environment"
+          class="visually-hidden"
+        />
+        <button type="button" class="group-chat-button">
+          <img src="assets/icons/ui/chat-blue.svg" alt="" />
+        </button>
+      </div>
+    </main>
+    <dialog class="sheet" id="check-in-sheet">
+      <span class="sheet-grabber"></span>
+
+      <div class="sheet-head">
+        <div>
+          <h2>I'm at Beadnell Bay</h2>
+          <p class="sheet-sub">23 mph SE · gusts 27 · 0.7 m · water 14°</p>
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Activity</span>
+        <div class="pills">
+          <input
+            type="radio"
+            id="ci-wing"
+            name="ci-activity"
+            value="wing"
+            checked
+          />
+          <label for="ci-wing"
+            ><img alt="" src="assets/icons/activity/wing.svg" />Wing</label
+          >
+
+          <input type="radio" id="ci-surf" name="ci-activity" value="surf" />
+          <label for="ci-surf"
+            ><img alt="" src="assets/icons/activity/surf.svg" />Surf</label
+          >
+
+          <input type="radio" id="ci-kite" name="ci-activity" value="kite" />
+          <label for="ci-kite"
+            ><img alt="" src="assets/icons/activity/kite.svg" />Kite</label
+          >
+
+          <input type="radio" id="ci-sup" name="ci-activity" value="sup" />
+          <label for="ci-sup"
+            ><img alt="" src="assets/icons/activity/sup.svg" />SUP</label
+          >
+
+          <input type="radio" id="ci-kayak" name="ci-activity" value="kayak" />
+          <label for="ci-kayak"
+            ><img alt="" src="assets/icons/activity/kayak.svg" />Kayak</label
+          >
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Until</span>
+        <div class="until-display">
+          <img src="assets/icons/ui/clock-blue.svg" alt="" />
+          <span class="until-time" id="until-time">18:30</span>
+          <span class="until-note" id="until-note">about 4 hrs</span>
+        </div>
+        <div class="until-chips">
+          <input type="radio" id="u1" name="until" value="1" />
+          <label for="u1">1 hr</label>
+
+          <input type="radio" id="u2" name="until" value="2" />
+          <label for="u2">2 hrs</label>
+
+          <input type="radio" id="u4" name="until" value="4" checked />
+          <label for="u4">4 hrs</label>
+
+          <input type="radio" id="u0" name="until" value="open" />
+          <label for="u0">Open</label>
+        </div>
+      </div>
+
+      <div class="sheet-field">
+        <span class="sheet-label">Visible to</span>
+        <div class="visibility">
+          <input
+            type="radio"
+            id="vis-friends"
+            name="visibility"
+            value="friends"
+            checked
+          />
+          <label for="vis-friends"
+            ><img
+              src="assets/icons/nav/friends-blue.svg"
+              alt=""
+            />Friends</label
+          >
+
+          <input
+            type="radio"
+            id="vis-everyone"
+            name="visibility"
+            value="everyone"
+          />
+          <label for="vis-everyone"
+            ><img src="assets/icons/nav/profile.svg" alt="" />Everyone
+            here</label
+          >
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary">Check in</button>
+      <button type="button" id="sheet-close">Cancel</button>
+    </dialog>
+    <dialog class="sheet" id="done-sheet">
+      <span class="sheet-grabber"></span>
+
+      <div class="done-top">
+        <span class="done-tick">
+          <img src="assets/icons/ui/check-green.svg" alt="" />
+        </span>
+        <h2>You're checked in</h2>
+        <p class="sheet-sub" id="done-sub">
+          Beadnell Bay · wingfoiling until 18:30
+        </p>
+      </div>
+
+      <div class="done-friends">
+        <div class="spot-avatars">
+          <span class="mini-avatar" style="background: #1558e0">KA</span>
+          <span class="mini-avatar" style="background: #e04f15">PJ</span>
+          <span class="mini-avatar" style="background: #5b49c9">JL</span>
+        </div>
+        <div class="checked-text">
+          <span class="checked-title">3 friends can see you're here</span>
+          <span class="sheet-note">They'll get an alert if they're nearby</span>
+        </div>
+      </div>
+      <div class="done-lower">
+        <button
+          type="button"
+          class="cam-button"
+          id="report-photo-button"
+          aria-label="Post a spot report"
+        >
+          Post a report
+          <img src="assets/icons/ui/camera-blue.svg" alt="" />
+        </button>
+
+        <input
+          type="file"
+          id="report-photo-input"
+          accept="image/*,video/*"
+          capture="environment"
+          class="visually-hidden"
+        />
+        <button type="button" class="btn-primary" id="done-close">Done</button>
+      </div>
+    </dialog>
+    <script src="script.js"></script>
+    <script src="motion.js"></script>
   </body>
 </html>
