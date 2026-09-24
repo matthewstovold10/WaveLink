@@ -260,6 +260,38 @@ const SPOTS = {
   },
 };
 
+const SITE_METRICS = {
+  wing: (s) => [
+    ["Wave", s.wave + " m", "Period", s.period + "s"],
+    ["Tide", s.tide, "High 15:42", "4.1 m"],
+    ["Temp", "15°/" + s.water + "°", "Air/Water", ""],
+  ],
+
+  surf: (s) => [
+    ["Swell", s.wave + " m", "Period", s.period + "s"],
+    ["Wind", s.wind + " " + s.dir, "Gusts", s.gust + " mph"],
+    ["Tide", s.tide, "High 15:42", "4.1 m"],
+  ],
+
+  kite: (s) => [
+    ["Wave", s.wave + " m", "Period", s.period + "s"],
+    ["Tide", s.tide, "High 15:42", "4.1 m"],
+    ["Temp", "15°/" + s.water + "°", "Air/Water", ""],
+  ],
+
+  sup: (s) => [
+    ["Wave", s.wave + " m", "Period", s.period + "s"],
+    ["Tide", s.tide, "High 15:42", "4.1 m"],
+    ["Gusts", s.gust + " mph", "Wind", s.wind + " " + s.dir],
+  ],
+
+  kayak: (s) => [
+    ["Swell", s.wave + " m", "Period", s.period + "s"],
+    ["Tide", s.tide, "High 15:42", "4.1 m"],
+    ["Gusts", s.gust + " mph", "Wind", s.wind + " " + s.dir],
+  ],
+};
+
 const ACTIVITIES = {
   wing: {
     hero: (s) => ({
@@ -402,39 +434,66 @@ const ACTIVITIES = {
   },
 };
 
+const ACTIVITY_KEY = "wl-activity";
+
 function showActivity(activity) {
   const plan = ACTIVITIES[activity];
+  if (!plan) return;
 
-  const near = SPOTS.beadnell;
+  localStorage.setItem(ACTIVITY_KEY, activity);
+
+  const near = SPOTS[PAGE_SPOT_KEY] || SPOTS.beadnell;
   const h = plan.hero(near);
 
-  document.getElementById("hero-value").textContent = h.value;
-  document.getElementById("hero-unit").textContent = h.unit;
-  document.getElementById("hero-dir").textContent = h.dir;
-  document.getElementById("hero-sec-label").textContent = h.secLabel;
-  document.getElementById("hero-sec-value").textContent = h.secValue;
+  const heroValue = document.getElementById("hero-value");
+  if (heroValue) {
+    heroValue.textContent = h.value;
+    document.getElementById("hero-unit").textContent = h.unit;
+    document.getElementById("hero-dir").textContent = h.dir;
+    document.getElementById("hero-sec-label").textContent = h.secLabel;
+    document.getElementById("hero-sec-value").textContent = h.secValue;
+  }
 
   const heroMetrics = document.querySelectorAll(".hero-metrics .hero-metric");
   plan.metrics(near).forEach(([label, value], i) => {
+    if (!heroMetrics[i]) return;
     heroMetrics[i].querySelector(".spot-label").textContent = label;
     heroMetrics[i].querySelector(".spot-value").textContent = value;
   });
 
+  const siteMetrics = document.querySelectorAll(
+    ".hero-metrics-site .hero-metric-site",
+  );
+  if (siteMetrics.length && SITE_METRICS[activity]) {
+    SITE_METRICS[activity](near).forEach(
+      ([bigLabel, bigValue, smallLabel, smallValue], i) => {
+        const block = siteMetrics[i];
+        if (!block) return;
+        block.querySelector(".spot-label").textContent = bigLabel;
+        block.querySelector(".spot-value").textContent = bigValue;
+        block.querySelector(".spot-label-site").textContent = smallLabel;
+        block.querySelector(".spot-value-site").textContent = smallValue;
+      },
+    );
+  }
+
   document.querySelectorAll(".favourite-tile").forEach((card) => {
-    const key = card.dataset.spot.split(" ")[0];
-    const spot = SPOTS[key];
+    const spot = SPOTS[card.dataset.spot.split(" ")[0]];
     if (!spot) return;
 
     const cells = card.querySelectorAll(".fav-metric");
     plan.fav(spot).forEach(([label, value], i) => {
+      if (!cells[i]) return;
       cells[i].querySelector(".spot-label").textContent = label;
       cells[i].querySelector(".spot-value").textContent = value;
     });
 
     const [text, kind] = plan.verdict(spot);
     const chip = card.querySelector(".spot-verdict");
-    chip.textContent = text;
-    chip.className = "spot-verdict verdict--" + kind;
+    if (chip) {
+      chip.textContent = text;
+      chip.className = "spot-verdict verdict--" + kind;
+    }
   });
 }
 
@@ -442,4 +501,10 @@ document.querySelectorAll('input[name="activity"]').forEach((radio) => {
   radio.addEventListener("change", () => showActivity(radio.value));
 });
 
-showActivity("wing");
+const savedActivity = localStorage.getItem(ACTIVITY_KEY) || "wing";
+
+// tick the matching pill, if this page has the picker
+const savedRadio = document.getElementById(savedActivity);
+if (savedRadio && savedRadio.name === "activity") savedRadio.checked = true;
+
+showActivity(savedActivity);
