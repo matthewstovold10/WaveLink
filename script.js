@@ -379,14 +379,14 @@ const ACTIVITIES = {
 
   sup: {
     hero: (s) => ({
-      value: s.wind,
-      unit: "mph",
+      value: s.wave,
+      unit: "m",
       dir: s.dir,
-      secLabel: "Wave",
-      secValue: s.wave + " m",
+      secLabel: "Wind",
+      secValue: s.wind + " mph",
     }),
     metrics: (s) => [
-      ["Wave", s.wave + " m"],
+      ["Period", s.period + " s"],
       ["Tide", s.tide],
       ["Water", s.water + "°"],
       ["Gusts", s.gust + " mph"],
