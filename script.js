@@ -299,7 +299,7 @@ const ACTIVITIES = {
       unit: "mph",
       dir: s.dir,
       secLabel: "Gusts",
-      secValue: s.gust,
+      secValue: s.gust + " mph",
     }),
     metrics: (s) => [
       ["Wave", s.wave + " m"],
@@ -309,7 +309,7 @@ const ACTIVITIES = {
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
-      ["Gusts", s.gust],
+      ["Gusts", s.gust + " mph"],
       ["Wave", s.wave + "m"],
       ["Tide", s.tide],
     ],
@@ -355,7 +355,7 @@ const ACTIVITIES = {
       unit: "mph",
       dir: s.dir,
       secLabel: "Gusts",
-      secValue: s.gust,
+      secValue: s.gust + " mph",
     }),
     metrics: (s) => [
       ["Wave", s.wave + " m"],
@@ -365,7 +365,7 @@ const ACTIVITIES = {
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
-      ["Gusts", s.gust],
+      ["Gusts", s.gust + " mph"],
       ["Wave", s.wave + "m"],
       ["Tide", s.tide],
     ],
@@ -503,8 +503,87 @@ document.querySelectorAll('input[name="activity"]').forEach((radio) => {
 
 const savedActivity = localStorage.getItem(ACTIVITY_KEY) || "wing";
 
-// tick the matching pill, if this page has the picker
 const savedRadio = document.getElementById(savedActivity);
 if (savedRadio && savedRadio.name === "activity") savedRadio.checked = true;
 
 showActivity(savedActivity);
+
+//weather api
+
+function degreesToCompass(deg) {
+  const points = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  return points[Math.round(deg / 45) % 8];
+}
+
+const WEATHER_KEY = "wl-weather";
+const CACHE_MINUTES = 15;
+
+function setUpdated(text) {
+  const timeLabel = document.querySelector(".time");
+  if (timeLabel) timeLabel.textContent = "Updated " + text;
+}
+
+async function loadWind() {
+  const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
+
+  if (cached && Date.now() - cached.at < CACHE_MINUTES * 60 * 1000) {
+    Object.assign(SPOTS.beadnell, cached.beadnell);
+    showActivity(localStorage.getItem(ACTIVITY_KEY) || "wing");
+    if (cached.time) setUpdated(cached.time);
+    return;
+  }
+
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=55.5556&longitude=-1.6297" +
+    "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m" +
+    "&wind_speed_unit=mph&timezone=Europe%2FLondon";
+
+  const marineUrl =
+    "https://marine-api.open-meteo.com/v1/marine?latitude=55.5556&longitude=-1.6297" +
+    "&current=wave_height,wave_period,sea_surface_temperature" +
+    "&timezone=Europe%2FLondon";
+
+  try {
+    const [weather, marine] = await Promise.all([
+      fetch(url).then((r) => r.json()),
+      fetch(marineUrl).then((r) => r.json()),
+    ]);
+
+    SPOTS.beadnell.wind = Math.round(weather.current.wind_speed_10m);
+    SPOTS.beadnell.gust = Math.round(weather.current.wind_gusts_10m);
+    SPOTS.beadnell.dir = degreesToCompass(weather.current.wind_direction_10m);
+
+    if (marine.current.wave_height != null) {
+      SPOTS.beadnell.wave = Number(marine.current.wave_height.toFixed(1));
+    }
+    if (marine.current.wave_period != null) {
+      SPOTS.beadnell.period = Math.round(marine.current.wave_period);
+    }
+    if (marine.current.sea_surface_temperature != null) {
+      SPOTS.beadnell.water = Math.round(marine.current.sea_surface_temperature);
+    }
+
+    showActivity(localStorage.getItem(ACTIVITY_KEY) || "wing");
+
+    const reading = new Date(weather.current.time);
+    const readingText = reading.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    setUpdated(readingText);
+
+    localStorage.setItem(
+      WEATHER_KEY,
+      JSON.stringify({
+        at: Date.now(),
+        beadnell: SPOTS.beadnell,
+        time: readingText,
+      }),
+    );
+  } catch (err) {
+    console.error("Couldn't load conditions:", err);
+  }
+}
+
+loadWind();
