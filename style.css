@@ -121,6 +121,15 @@ header {
   appearance: none;
 }
 
+.dir-arrow {
+  width: 11px;
+  height: 11px;
+  margin-left: 3px;
+  vertical-align: -1px;
+  color: inherit;
+  flex-shrink: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1418,4 +1427,141 @@ body.sheet-open {
   font-size: 11px;
   font-weight: 600;
   color: #5a6c85;
+}
+
+.site-forecast {
+  background-color: white;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 2px rgba(10, 27, 51, 0.06),
+    0 6px 16px -12px rgba(10, 27, 51, 0.22);
+  padding: 3px 15px 10px 15px;
+  margin-top: 20px;
+}
+
+.site-forecast-header {
+  font-size: 11px;
+}
+
+.forecast-days {
+  display: flex;
+  gap: 6px;
+}
+
+.forecast-days input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.forecast-days label {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 9px 4px;
+  border-radius: 12px;
+  background: #f4f7fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.forecast-days input:checked + label {
+  background: #1558e0;
+  color: white;
+}
+
+.day-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #5a6c85;
+}
+
+.day-wind {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0a1b33;
+}
+
+.day-dir {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #5a6c85;
+}
+
+.forecast-days input:checked + label .day-name,
+.forecast-days input:checked + label .day-wind,
+.forecast-days input:checked + label .day-dir {
+  color: #fff;
+}
+
+.hours {
+  display: flex;
+  gap: 2px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #edf1f6;
+
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
+.hours::-webkit-scrollbar {
+  display: none;
+}
+
+.hour {
+  flex: 0 0 44px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.hour-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #5a6c85;
+}
+
+.hour.is-now .hour-label {
+  color: #1558e0;
+  font-weight: 800;
+}
+
+.hour-wind {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0a1b33;
+}
+
+.hour-arrow {
+  width: 13px;
+  height: 13px;
+  color: #5a6c85;
+}
+
+.hour.is-daybreak {
+  border-left: 1px solid #edf1f6;
+  padding-left: 6px;
+  margin-left: 4px;
+}
+
+.hour.is-daybreak .hour-label {
+  color: #0a1b33;
+  font-weight: 800;
+}
+
+.hour.is-night .hour-wind {
+  color: #8da4c0;
 }

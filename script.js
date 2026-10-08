@@ -442,6 +442,37 @@ const ACTIVITIES = {
   },
 };
 
+const COMPASS_DEG = {
+  N: 0,
+  NE: 45,
+  E: 90,
+  SE: 135,
+  S: 180,
+  SW: 225,
+  W: 270,
+  NW: 315,
+};
+
+function arrowSvg(deg) {
+  return `<svg class="dir-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+    style="transform: rotate(${deg}deg)">
+    <path d="M12 20V5" /><path d="m6.2 11 5.8-6 5.8 6" /></svg>`;
+}
+
+function setValue(el, value) {
+  if (!el) return;
+
+  const text = String(value);
+  const match = text.match(/(?:^|\s)(N|NE|E|SE|S|SW|W|NW)$/);
+
+  el.textContent = text;
+
+  if (match) {
+    el.insertAdjacentHTML("beforeend", arrowSvg(COMPASS_DEG[match[1]]));
+  }
+}
+
 const ACTIVITY_KEY = "wl-activity";
 
 function showActivity(activity) {
@@ -457,16 +488,16 @@ function showActivity(activity) {
   if (heroValue) {
     heroValue.textContent = h.value;
     document.getElementById("hero-unit").textContent = h.unit;
-    document.getElementById("hero-dir").textContent = h.dir;
+    setValue(document.getElementById("hero-dir"), h.dir);
     document.getElementById("hero-sec-label").textContent = h.secLabel;
-    document.getElementById("hero-sec-value").textContent = h.secValue;
+    setValue(document.getElementById("hero-sec-value"), h.secValue);
   }
 
   const heroMetrics = document.querySelectorAll(".hero-metrics .hero-metric");
   plan.metrics(near).forEach(([label, value], i) => {
     if (!heroMetrics[i]) return;
     heroMetrics[i].querySelector(".spot-label").textContent = label;
-    heroMetrics[i].querySelector(".spot-value").textContent = value;
+    setValue(heroMetrics[i].querySelector(".spot-value"), value);
   });
 
   const siteMetrics = document.querySelectorAll(
@@ -478,9 +509,9 @@ function showActivity(activity) {
         const block = siteMetrics[i];
         if (!block) return;
         block.querySelector(".spot-label").textContent = bigLabel;
-        block.querySelector(".spot-value").textContent = bigValue;
+        setValue(block.querySelector(".spot-value"), bigValue);
         block.querySelector(".spot-label-site").textContent = smallLabel;
-        block.querySelector(".spot-value-site").textContent = smallValue;
+        setValue(block.querySelector(".spot-value-site"), smallValue);
       },
     );
   }
@@ -493,7 +524,7 @@ function showActivity(activity) {
     plan.fav(spot).forEach(([label, value], i) => {
       if (!cells[i]) return;
       cells[i].querySelector(".spot-label").textContent = label;
-      cells[i].querySelector(".spot-value").textContent = value;
+      setValue(cells[i].querySelector(".spot-value"), value);
     });
 
     const [text, kind] = plan.verdict(spot);
@@ -542,14 +573,14 @@ async function loadWind() {
   }
 
   const url =
-    "https://api.open-meteo.com/v1/forecast?latitude=55.5556&longitude=-1.6297" +
+    "https://api.open-meteo.com/v1/forecast?latitude=55.5560&longitude=-1.5900" +
     "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m" +
-    "&wind_speed_unit=mph&timezone=Europe%2FLondon";
+    "&wind_speed_unit=mph&timezone=Europe%2FLondon&cell_selection=sea";
 
   const marineUrl =
-    "https://marine-api.open-meteo.com/v1/marine?latitude=55.5556&longitude=-1.6297" +
+    "https://marine-api.open-meteo.com/v1/marine?latitude=55.5560&longitude=-1.5900" +
     "&current=wave_height,wave_period,sea_surface_temperature" +
-    "&timezone=Europe%2FLondon";
+    "&timezone=Europe%2FLondon&cell_selection=sea";
 
   try {
     const [weather, marine] = await Promise.all([
@@ -595,3 +626,121 @@ async function loadWind() {
 }
 
 loadWind();
+
+async function loadForecast() {
+  const row = document.querySelector(".forecast-days");
+  if (!row) return;
+
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=55.5560&longitude=-1.5900" +
+    "&daily=wind_speed_10m_mean,wind_gusts_10m_mean,wind_direction_10m_dominant" +
+    "&forecast_days=7&wind_speed_unit=mph&timezone=Europe%2FLondon&cell_selection=sea";
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const d = data.daily;
+
+    row.innerHTML = d.time
+      .map((date, i) => {
+        const name =
+          i === 0
+            ? "Today"
+            : new Date(date).toLocaleDateString("en-GB", { weekday: "short" });
+
+        return `
+          <input type="radio" id="day-${i}" name="day" value="${i}" ${i === 0 ? "checked" : ""} />
+          <label for="day-${i}">
+            <span class="day-name">${name}</span>
+            <span class="day-wind">${Math.round(d.wind_speed_10m_mean[i])}</span>
+            <span class="day-dir">${degreesToCompass(d.wind_direction_10m_dominant[i])}</span>
+          </label>`;
+      })
+      .join("");
+  } catch (err) {
+    console.error("Couldn't load forecast:", err);
+  }
+}
+
+loadForecast();
+
+let HOURLY = null;
+
+async function loadHours() {
+  const row = document.getElementById("hours");
+  if (!row) return;
+
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=55.5560&longitude=-1.5900" +
+    "&hourly=wind_speed_10m,wind_direction_10m" +
+    "&forecast_days=7&wind_speed_unit=mph&timezone=Europe%2FLondon&cell_selection=sea";
+
+  try {
+    const res = await fetch(url);
+    HOURLY = (await res.json()).hourly;
+    showHours(0);
+  } catch (err) {
+    console.error("Couldn't load hours:", err);
+  }
+}
+
+function showHours(dayIndex) {
+  const row = document.getElementById("hours");
+  if (!row || !HOURLY) return;
+
+  const d = HOURLY;
+  const day = Number(dayIndex);
+  const isToday = day === 0;
+
+  let start, count;
+
+  if (isToday) {
+    const now = new Date();
+    start = d.time.findIndex((t) => new Date(t) > now) - 1;
+    if (start < 0) start = 0;
+    count = 24 - Number(d.time[start].slice(11, 13));
+  } else {
+    start = day * 24;
+    count = 24;
+  }
+
+  const STEP = 2;
+  const indexes = [];
+  for (let n = start; n < start + count; n += STEP) indexes.push(n);
+
+  row.innerHTML = indexes
+    .map((n) => {
+      const t = d.time[n];
+      if (t == null) return "";
+
+      const hour = Number(t.slice(11, 13));
+      const spin = d.wind_direction_10m[n];
+
+      const label = isToday && n === start ? "Now" : t.slice(11, 13);
+
+      const classes =
+        "hour" +
+        (isToday && n === start ? " is-now" : "") +
+        (hour < 7 || hour > 20 ? " is-night" : "");
+
+      return `
+        <div class="${classes}">
+          <span class="hour-label">${label}</span>
+          <span class="hour-wind">${Math.round(d.wind_speed_10m[n])}</span>
+          <svg class="hour-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"
+               style="transform: rotate(${spin}deg)" aria-hidden="true">
+            <path d="M12 20V5" /><path d="m6.2 11 5.8-6 5.8 6" />
+          </svg>
+        </div>`;
+    })
+    .join("");
+
+  row.scrollLeft = 0;
+}
+
+document.querySelector(".forecast-days")?.addEventListener("change", (e) => {
+  showHours(e.target.value);
+});
+
+loadHours();
