@@ -1,0 +1,17 @@
+{
+  "name": "WaveLink",
+  "short_name": "WaveLink",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#eaf1fc",
+  "icons": [
+    {
+      "src": "assets/logo/app-icon/app-icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

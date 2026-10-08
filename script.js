@@ -313,12 +313,20 @@ const ACTIVITIES = {
       ["Wave", s.wave + "m"],
       ["Tide", s.tide],
     ],
-    verdict: (s) =>
-      s.wind >= 18
-        ? ["Good", "good"]
-        : s.wind >= 12
-          ? ["Light", "moderate"]
-          : ["Too light", "poor"],
+    verdict: (s) => {
+      const spread = s.gust - s.wind;
+      if (s.wind >= 18) {
+        return spread >= 12 ? ["Gusty", "moderate"] : ["Good", "good"];
+      }
+
+      if (s.wind >= 10) {
+        return s.gust >= 18
+          ? ["Gusty, rideable", "moderate"]
+          : ["Too light", "poor"];
+      }
+
+      return ["Too light", "poor"];
+    },
   },
 
   surf: {

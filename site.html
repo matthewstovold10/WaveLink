@@ -5,7 +5,11 @@
     <link rel="stylesheet" href="style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="manifest" href="manifest.json" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -142,6 +146,30 @@
           <img src="assets/icons/ui/chat-blue.svg" alt="" />
         </button>
       </div>
+      <section class="site-people-here">
+        <div class="site-people-header">
+          <span class="dot"></span>
+          <h2><b>7</b> people here now</h2>
+          <a href="whos-here.html" class="see-who">
+            See who
+            <img src="assets/icons/ui/chevron-right-blue.svg" />
+          </a>
+        </div>
+        <div class="site-people-main">
+          <div class="spot-avatars">
+            <span class="mini-avatar" style="background: #1558e0">KA</span>
+            <span class="mini-avatar" style="background: #e04f15">PJ</span>
+            <span class="mini-avatar" style="background: #5b49c9">JL</span>
+            <span class="mini-more">+4</span>
+          </div>
+          <div class="site-people-friends">
+            <span class="people-friends-title">3 friends on the water</span>
+            <span class="people-friends-sub"
+              >3 surfers · 2 wingfoilers · 2 kiters</span
+            >
+          </div>
+        </div>
+      </section>
     </main>
     <dialog class="sheet" id="check-in-sheet">
       <span class="sheet-grabber"></span>
