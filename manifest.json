@@ -1,6 +1,6 @@
 {
-  "name": "WaveLink",
-  "short_name": "WaveLink",
+  "name": "Wave Link",
+  "short_name": "Wave Link",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
