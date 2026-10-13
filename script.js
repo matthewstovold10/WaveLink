@@ -91,6 +91,14 @@ const ACTIVITY_NAMES = {
   kayak: "kayaking",
 };
 
+const SPORT_SHORT = {
+  wing: "wing",
+  surf: "surf",
+  kite: "kite",
+  sup: "SUP",
+  kayak: "kayak",
+};
+
 const CHECKIN_KEY = "wl-checkin";
 
 const SPOT_NAMES = {
@@ -237,6 +245,7 @@ const SPOTS = {
     swell: "SE",
     tide: "Rising",
     water: 14,
+    air: 15,
   },
   budle: {
     wind: 13,
@@ -247,6 +256,7 @@ const SPOTS = {
     swell: "SE",
     tide: "Rising",
     water: 14,
+    air: 15,
   },
   seaburn: {
     wind: 18,
@@ -257,6 +267,7 @@ const SPOTS = {
     swell: "SE",
     tide: "Rising",
     water: 14,
+    air: 15,
   },
 };
 
@@ -302,10 +313,10 @@ const ACTIVITIES = {
       secValue: s.gust + " mph",
     }),
     metrics: (s) => [
-      ["Wave", s.wave + " m"],
-      ["Period", s.period + " s"],
-      ["Tide", s.tide],
-      ["Water", s.water + "°"],
+      ["Wave", s.wave + " m", "Period " + s.period + "s"],
+      ["Tide", s.tide, "High 15:42"],
+      ["Air", s.air + "°", "Water " + s.water + "°"],
+      ["Sunset", s.sunset || "—", s.lightLeft || ""],
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
@@ -316,16 +327,18 @@ const ACTIVITIES = {
     verdict: (s) => {
       const spread = s.gust - s.wind;
       if (s.wind >= 18) {
-        return spread >= 12 ? ["Gusty", "moderate"] : ["Good", "good"];
+        return spread >= 12
+          ? ["Gusty for wing", "moderate"]
+          : ["Good for wing", "good"];
       }
 
       if (s.wind >= 10) {
-        return s.gust >= 18
-          ? ["Gusty, rideable", "moderate"]
-          : ["Too light", "poor"];
+        return s.gust >= 25
+          ? ["Gusty but rideable for wing", "moderate"]
+          : ["Too light for wing", "poor"];
       }
 
-      return ["Too light", "poor"];
+      return ["Too light for wing", "poor"];
     },
   },
 
@@ -338,10 +351,10 @@ const ACTIVITIES = {
       secValue: s.period + " s",
     }),
     metrics: (s) => [
-      ["Swell", s.swell],
-      ["Wind", s.wind + " " + s.dir],
-      ["Tide", s.tide],
-      ["Water", s.water + "°"],
+      ["Wind", s.wind + " " + s.dir, "Gusts " + s.gust],
+      ["Tide", s.tide, "High 15:42"],
+      ["Air", s.air + "°", "Water " + s.water + "°"],
+      ["Sunset", s.sunset || "—", s.lightLeft || ""],
     ],
     fav: (s) => [
       ["Wave", s.wave + "m"],
@@ -351,10 +364,10 @@ const ACTIVITIES = {
     ],
     verdict: (s) =>
       s.wave >= 1
-        ? ["Good", "good"]
+        ? ["Good for surf", "good"]
         : s.wave >= 0.5
-          ? ["Small", "moderate"]
-          : ["Flat", "poor"],
+          ? ["Small for surf", "moderate"]
+          : [" Too flat for surf", "poor"],
   },
 
   kite: {
@@ -366,10 +379,10 @@ const ACTIVITIES = {
       secValue: s.gust + " mph",
     }),
     metrics: (s) => [
-      ["Wave", s.wave + " m"],
-      ["Period", s.period + " s"],
-      ["Tide", s.tide],
-      ["Water", s.water + "°"],
+      ["Wave", s.wave + " m", "Period " + s.period + "s"],
+      ["Tide", s.tide, "High 15:42"],
+      ["Air", s.air + "°", "Water " + s.water + "°"],
+      ["Sunset", s.sunset || "—", s.lightLeft || ""],
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
@@ -379,10 +392,10 @@ const ACTIVITIES = {
     ],
     verdict: (s) =>
       s.wind >= 16
-        ? ["Good", "good"]
+        ? ["Good for kite", "good"]
         : s.wind >= 11
-          ? ["Light", "moderate"]
-          : ["Too light", "poor"],
+          ? ["Light for kite", "moderate"]
+          : ["Too light for kite", "poor"],
   },
 
   sup: {
@@ -394,23 +407,23 @@ const ACTIVITIES = {
       secValue: s.wind + " mph",
     }),
     metrics: (s) => [
-      ["Period", s.period + " s"],
-      ["Tide", s.tide],
-      ["Water", s.water + "°"],
-      ["Gusts", s.gust + " mph"],
+      ["Wind", s.wind + " " + s.dir, "Gusts " + s.gust],
+      ["Tide", s.tide, "High 15:42"],
+      ["Air", s.air + "°", "Water " + s.water + "°"],
+      ["Sunset", s.sunset || "—", s.lightLeft || ""],
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
       ["Wave", s.wave + "m"],
-      ["Water", s.water + "°"],
+      ["Temp", s.air + "°", "water " + s.water + "°"],
       ["Tide", s.tide],
     ],
     verdict: (s) =>
       s.wind <= 12
-        ? ["Good", "good"]
+        ? ["Good for SUP", "good"]
         : s.wind <= 18
-          ? ["Breezy", "moderate"]
-          : ["Too windy", "poor"],
+          ? ["Breezy for SUP", "moderate"]
+          : ["Too windy for SUP", "poor"],
   },
 
   kayak: {
@@ -424,21 +437,21 @@ const ACTIVITIES = {
     metrics: (s) => [
       ["Swell", s.wave + " m"],
       ["Tide", s.tide],
-      ["Water", s.water + "°"],
+      ["Temp", s.air + "°", "water " + s.water + "°"],
       ["Gusts", s.gust + " mph"],
     ],
     fav: (s) => [
       ["Wind", s.wind + " " + s.dir],
       ["Swell", s.wave + "m"],
-      ["Water", s.water + "°"],
+      ["Temp", s.air + "°", "water " + s.water + "°"],
       ["Tide", s.tide],
     ],
     verdict: (s) =>
       s.wind <= 14
-        ? ["Good", "good"]
+        ? ["Good for kayak", "good"]
         : s.wind <= 20
-          ? ["Lively", "moderate"]
-          : ["Exposed", "poor"],
+          ? ["Lively for kayak", "moderate"]
+          : ["Too exposed for kayak", "poor"],
   },
 };
 
@@ -464,12 +477,23 @@ function setValue(el, value) {
   if (!el) return;
 
   const text = String(value);
-  const match = text.match(/(?:^|\s)(N|NE|E|SE|S|SW|W|NW)$/);
+  const dir = text.match(/(?:^|\s)(N|NE|E|SE|S|SW|W|NW)$/);
+  const split = text.match(/^(-?\d+(?:\.\d+)?)\s*([a-zA-Z°]*)$/);
 
-  el.textContent = text;
+  if (split) {
+    el.textContent = split[1];
+    if (split[2]) {
+      el.insertAdjacentHTML(
+        "beforeend",
+        `<span class="unit">${split[2]}</span>`,
+      );
+    }
+  } else {
+    el.textContent = text;
+  }
 
-  if (match) {
-    el.insertAdjacentHTML("beforeend", arrowSvg(COMPASS_DEG[match[1]]));
+  if (dir) {
+    el.insertAdjacentHTML("beforeend", arrowSvg(COMPASS_DEG[dir[1]]));
   }
 }
 
@@ -484,20 +508,37 @@ function showActivity(activity) {
   const near = SPOTS[PAGE_SPOT_KEY] || SPOTS.beadnell;
   const h = plan.hero(near);
 
+  const heroVerdict = document.getElementById("hero-verdict");
+  if (heroVerdict) {
+    const [vText, vKind] = plan.verdict(near);
+    heroVerdict.textContent = vText;
+    heroVerdict.className = "spot-verdict verdict--" + vKind;
+  }
+
   const heroValue = document.getElementById("hero-value");
   if (heroValue) {
     heroValue.textContent = h.value;
     document.getElementById("hero-unit").textContent = h.unit;
-    setValue(document.getElementById("hero-dir"), h.dir);
+    document.getElementById("hero-dir").textContent = h.dir;
+    const heroArrow = document.getElementById("hero-arrow");
+    if (heroArrow) heroArrow.innerHTML = arrowSvg(COMPASS_DEG[h.dir] ?? 0);
     document.getElementById("hero-sec-label").textContent = h.secLabel;
-    setValue(document.getElementById("hero-sec-value"), h.secValue);
+    const secEl = document.getElementById("hero-sec-value");
+    if (secEl) {
+      const [num, ...rest] = String(h.secValue).split(" ");
+      secEl.innerHTML = rest.length
+        ? `${num}<span class="hero-gusts-unit">${rest.join(" ")}</span>`
+        : num;
+    }
   }
 
   const heroMetrics = document.querySelectorAll(".hero-metrics .hero-metric");
-  plan.metrics(near).forEach(([label, value], i) => {
+  plan.metrics(near).forEach(([label, value, sub], i) => {
     if (!heroMetrics[i]) return;
     heroMetrics[i].querySelector(".spot-label").textContent = label;
     setValue(heroMetrics[i].querySelector(".spot-value"), value);
+    const subEl = heroMetrics[i].querySelector(".spot-sub");
+    if (subEl) subEl.textContent = sub || "";
   });
 
   const siteMetrics = document.querySelectorAll(
@@ -534,11 +575,29 @@ function showActivity(activity) {
       chip.className = "spot-verdict verdict--" + kind;
     }
   });
+
+  const picker = document.querySelector(".sport-picker-site");
+  if (picker) {
+    const icon = picker.querySelector(".sport-site-icon img");
+    const name = picker.querySelector(".sport-site");
+    const short = picker.querySelector(".sport-site-description b");
+    const select = picker.querySelector("#sport");
+
+    if (icon) icon.src = "assets/icons/activity/" + activity + ".svg";
+    if (name) name.textContent = ACTIVITY_NAMES[activity];
+    if (short) short.textContent = SPORT_SHORT[activity];
+    if (select) select.value = activity;
+  }
 }
 
 document.querySelectorAll('input[name="activity"]').forEach((radio) => {
   radio.addEventListener("change", () => showActivity(radio.value));
 });
+
+const sportSelect = document.getElementById("sport");
+if (sportSelect) {
+  sportSelect.addEventListener("change", () => showActivity(sportSelect.value));
+}
 
 const savedActivity = localStorage.getItem(ACTIVITY_KEY) || "wing";
 
@@ -554,28 +613,12 @@ function degreesToCompass(deg) {
   return points[Math.round(deg / 45) % 8];
 }
 
-const WEATHER_KEY = "wl-weather";
-const CACHE_MINUTES = 15;
-
-function setUpdated(text) {
-  const timeLabel = document.querySelector(".time");
-  if (timeLabel) timeLabel.textContent = "Updated " + text;
-}
-
 async function loadWind() {
-  const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
-
-  if (cached && Date.now() - cached.at < CACHE_MINUTES * 60 * 1000) {
-    Object.assign(SPOTS.beadnell, cached.beadnell);
-    showActivity(localStorage.getItem(ACTIVITY_KEY) || "wing");
-    if (cached.time) setUpdated(cached.time);
-    return;
-  }
-
   const url =
     "https://api.open-meteo.com/v1/forecast?latitude=55.5560&longitude=-1.5900" +
-    "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m" +
-    "&wind_speed_unit=mph&timezone=Europe%2FLondon&cell_selection=sea";
+    "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,temperature_2m" +
+    "&daily=sunset" +
+    "&forecast_days=1&wind_speed_unit=mph&timezone=Europe%2FLondon&cell_selection=sea";
 
   const marineUrl =
     "https://marine-api.open-meteo.com/v1/marine?latitude=55.5560&longitude=-1.5900" +
@@ -591,6 +634,16 @@ async function loadWind() {
     SPOTS.beadnell.wind = Math.round(weather.current.wind_speed_10m);
     SPOTS.beadnell.gust = Math.round(weather.current.wind_gusts_10m);
     SPOTS.beadnell.dir = degreesToCompass(weather.current.wind_direction_10m);
+    SPOTS.beadnell.air = Math.round(weather.current.temperature_2m);
+
+    if (weather.daily && weather.daily.sunset) {
+      const setTime = weather.daily.sunset[0];
+      SPOTS.beadnell.sunset = setTime.slice(11, 16);
+
+      const hoursLeft = (new Date(setTime) - Date.now()) / 3600000;
+      SPOTS.beadnell.lightLeft =
+        hoursLeft > 0 ? Math.round(hoursLeft) + " hr light" : "after dark";
+    }
 
     if (marine.current.wave_height != null) {
       SPOTS.beadnell.wave = Number(marine.current.wave_height.toFixed(1));
@@ -603,23 +656,6 @@ async function loadWind() {
     }
 
     showActivity(localStorage.getItem(ACTIVITY_KEY) || "wing");
-
-    const reading = new Date(weather.current.time);
-    const readingText = reading.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    setUpdated(readingText);
-
-    localStorage.setItem(
-      WEATHER_KEY,
-      JSON.stringify({
-        at: Date.now(),
-        beadnell: SPOTS.beadnell,
-        time: readingText,
-      }),
-    );
   } catch (err) {
     console.error("Couldn't load conditions:", err);
   }
@@ -668,7 +704,8 @@ let HOURLY = null;
 
 async function loadHours() {
   const row = document.getElementById("hours");
-  if (!row) return;
+  const strip = document.querySelector(".strip-bars");
+  if (!row && !strip) return;
 
   const url =
     "https://api.open-meteo.com/v1/forecast?latitude=55.5560&longitude=-1.5900" +
@@ -679,9 +716,71 @@ async function loadHours() {
     const res = await fetch(url);
     HOURLY = (await res.json()).hourly;
     showHours(0);
+    showStrip();
   } catch (err) {
     console.error("Couldn't load hours:", err);
   }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    loadWind();
+    loadForecast();
+    loadHours();
+  }
+});
+
+function windLevel(mph) {
+  if (mph < 8) return 1;
+  if (mph < 13) return 2;
+  if (mph < 18) return 3;
+  if (mph < 25) return 4;
+  return 5;
+}
+
+function showStrip() {
+  const slots = document.querySelectorAll(".bar-slot");
+  if (!slots.length || !HOURLY) return;
+
+  const d = HOURLY;
+  const now = new Date();
+  let start = d.time.findIndex((t) => new Date(t) > now) - 1;
+  if (start < 0) start = 0;
+
+  const windowMax = Math.max(
+    20,
+    ...Array.from(slots, (_, i) =>
+      Math.round(d.wind_speed_10m[start + i] || 0),
+    ),
+  );
+
+  const MIN_H = 6;
+  const MAX_H = 44;
+
+  let peak = 0;
+  let peakAt = "";
+
+  slots.forEach((slot, i) => {
+    const n = start + i;
+    const t = d.time[n];
+    if (t == null) return;
+
+    const mph = Math.round(d.wind_speed_10m[n]);
+    const h = MIN_H + (mph / windowMax) * (MAX_H - MIN_H);
+
+    slot.style.setProperty("--v", h.toFixed(1) + "px");
+    slot.dataset.level = windLevel(mph);
+    slot.querySelector(".bar-label").textContent =
+      i === 0 ? "Now" : t.slice(11, 13);
+
+    if (mph > peak) {
+      peak = mph;
+      peakAt = t.slice(11, 16);
+    }
+  });
+
+  const peakEl = document.getElementById("strip-peak");
+  if (peakEl) peakEl.textContent = `Peaks ${peak} mph at ${peakAt}`;
 }
 
 function showHours(dayIndex) {
@@ -744,3 +843,128 @@ document.querySelector(".forecast-days")?.addEventListener("change", (e) => {
 });
 
 loadHours();
+
+const CHART_DATUM = 2.7;
+
+const HOURS_BACK = 3;
+const HOURS_FWD = 9;
+
+async function loadTide() {
+  if (!document.querySelector(".tide-chart-wrap")) return;
+
+  const url =
+    "https://marine-api.open-meteo.com/v1/marine?latitude=55.5560&longitude=-1.5900" +
+    "&hourly=sea_level_height_msl&forecast_days=2" +
+    "&timezone=Europe%2FLondon&cell_selection=sea";
+
+  try {
+    const d = (await fetch(url).then((r) => r.json())).hourly;
+    drawTide(d.time, d.sea_level_height_msl);
+  } catch (err) {
+    console.error("Couldn't load tide:", err);
+  }
+}
+
+function refine(levels, i) {
+  const [a, b, c] = [levels[i - 1], levels[i], levels[i + 1]];
+  const denom = a - 2 * b + c;
+  if (denom === 0) return { shift: 0, h: b };
+  const shift = (a - c) / (2 * denom);
+  return { shift, h: b - ((a - c) * shift) / 4 };
+}
+
+function drawTide(times, levels) {
+  const now = Date.now();
+  const nowIdx = times.findIndex((t) => new Date(t) > now) - 1;
+  if (nowIdx < 1) return;
+
+  const from = Math.max(1, nowIdx - HOURS_BACK);
+  const to = Math.min(times.length - 2, nowIdx + HOURS_FWD);
+
+  const W = 300,
+    H = 100,
+    PAD = 14;
+  const span = to - from;
+
+  const win = levels.slice(from, to + 1);
+  const lo = Math.min(...win);
+  const hi = Math.max(...win);
+
+  const xFor = (hours) => (W * hours) / span;
+  const yFor = (h) => H - PAD - ((h - lo) / (hi - lo)) * (H - PAD * 2);
+  const pct = (hours) => Math.min(95, Math.max(5, (hours / span) * 100));
+
+  const pts = win.map((h, i) => [xFor(i), yFor(h)]);
+
+  let line = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] || p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    line += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+
+  document.getElementById("tide-line").setAttribute("d", line);
+  document
+    .getElementById("tide-fill")
+    .setAttribute("d", `${line} L${W},${H} L0,${H} Z`);
+
+  const nowHours = nowIdx - from + (now - new Date(times[nowIdx])) / 3600000;
+  const a = levels[nowIdx];
+  const b = levels[nowIdx + 1];
+  const nowH = a + (b - a) * (nowHours - (nowIdx - from));
+
+  const nowLeft = (nowHours / span) * 100 + "%";
+  const nowTop = (yFor(nowH) / H) * 100 + "%";
+
+  const dot = document.getElementById("tide-dot");
+  dot.hidden = false;
+  dot.style.left = nowLeft;
+  dot.style.top = nowTop;
+
+  const nowLabel = document.getElementById("tide-now-label");
+  nowLabel.hidden = false;
+  nowLabel.style.left = nowLeft;
+  nowLabel.style.top = nowTop;
+
+  const marks = [];
+  for (let i = from + 1; i < to; i++) {
+    const [p, c, n] = [levels[i - 1], levels[i], levels[i + 1]];
+    if ((c > p && c >= n) || (c < p && c <= n)) {
+      const { shift, h } = refine(levels, i);
+      const at = new Date(new Date(times[i]).getTime() + shift * 3600000);
+      marks.push({
+        hours: i - from + shift,
+        high: c > p,
+        at: at.toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        h: h + CHART_DATUM,
+      });
+    }
+  }
+
+  const row = document.getElementById("tide-labels");
+  row.innerHTML = marks
+    .map(
+      (m) =>
+        `<span class="tide-mark" style="left:${pct(m.hours)}%">${m.high ? "High" : "Low"} ${m.at}</span>`,
+    )
+    .join("");
+
+  const next = marks[0];
+  if (next) {
+    const state = next.high ? "Rising" : "Falling";
+    document.getElementById("tide-state").textContent = state;
+    document.getElementById("tide-next").textContent =
+      `${next.high ? "High" : "Low"} ${next.at} ${next.h.toFixed(1)} m`;
+
+    SPOTS[PAGE_SPOT_KEY].tide = state;
+  }
+}
+
+loadTide();

@@ -11,7 +11,7 @@
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="theme-color" content="#eaf1fc" />
+    <meta name="theme-color" content="#e2e8e5" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
@@ -19,17 +19,21 @@
     />
     <link rel="stylesheet" href="motion.css" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="assets/logo/favicon/favicon.ico" sizes="any" />
     <link
       rel="icon"
-      href="assets/logo/favicon/favicon.svg"
+      href="assets/wavelink-logo-files/favicon.ico"
+      sizes="any"
+    />
+    <link
+      rel="icon"
+      href="assets/wavelink-logo-files/favicon.svg"
       type="image/svg+xml"
     />
     <link
       rel="apple-touch-icon"
-      href="assets/logo/favicon/apple-touch-icon.png"
+      href="assets/wavelink-logo-files/apple-touch-icon.png"
     />
-    <meta name="theme-color" content="#eaf1fc" />
+    <meta name="theme-color" content="#e2e8e5" />
   </head>
   <body>
     <div class="splash" id="splash" aria-hidden="true">
@@ -65,17 +69,6 @@
       <span class="avatar">MS</span>
     </header>
     <main>
-      <!--<div class="search-bar">
-        <img src="assets/icons/ui/search.svg" class="search-icon" alt="" />
-        <label for="spot-search" class="visually-hidden"
-          >Search spots, people or activities</label
-        >
-        <input
-          id="spot-search"
-          type="search"
-          placeholder="Search spots, people or activities"
-        />
-      </div>-->
       <div class="checked-banner" id="checked-banner" hidden>
         <span class="checked-dot"></span>
         <div class="checked-text">
@@ -92,18 +85,25 @@
         <div class="condition-near-title">
           <img
             alt=""
-            src="assets/icons/nav/map-blue.svg"
+            src="assets/icons/nav/map.svg"
             class="condition-near-icon"
           />
           <span class="location">Beadnell Bay</span>
-          <span class="time">Now 14:20</span>
+          <span class="spot-verdict verdict--good" id="hero-verdict">Good</span>
         </div>
         <div class="hero-main">
           <div class="hero-wind">
             <span class="hero-number" id="hero-value">23</span>
             <div class="hero-unit">
               <span id="hero-unit">mph</span>
-              <span class="hero-dir" id="hero-dir">SE</span>
+              <span class="hero-dir-row">
+                <span
+                  class="hero-arrow"
+                  id="hero-arrow"
+                  aria-hidden="true"
+                ></span>
+                <span class="hero-dir" id="hero-dir">SE</span>
+              </span>
             </div>
           </div>
           <div class="hero-gusts">
@@ -111,23 +111,53 @@
             <span class="hero-gusts-value" id="hero-sec-value">27</span>
           </div>
         </div>
+        <div class="strip">
+          <div class="strip-head">
+            <span class="strip-title">Next 6 hours</span>
+            <span class="strip-peak" id="strip-peak"></span>
+          </div>
+          <div class="strip-bars">
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+            <div class="bar-slot">
+              <span class="bar"></span><span class="bar-label"></span>
+            </div>
+          </div>
+        </div>
 
         <div class="hero-metrics">
           <div class="hero-metric">
             <span class="spot-label">Wave</span>
             <span class="spot-value">0.7 m</span>
-          </div>
-          <div class="hero-metric">
-            <span class="spot-label">Period</span>
-            <span class="spot-value">6 s</span>
+            <span class="spot-sub">Period 6s</span>
           </div>
           <div class="hero-metric">
             <span class="spot-label">Tide</span>
             <span class="spot-value">Rising</span>
+            <span class="spot-sub">High 15:42</span>
           </div>
           <div class="hero-metric">
-            <span class="spot-label">Water</span>
-            <span class="spot-value">14°</span>
+            <span class="spot-label">Air</span>
+            <span class="spot-value">18°</span>
+            <span class="spot-sub">Water 12°</span>
+          </div>
+          <div class="hero-metric">
+            <span class="spot-label">Sunset</span>
+            <span class="spot-value">19:48</span>
+            <span class="spot-sub">5 hr light</span>
           </div>
         </div>
         <div class="condition-near-description">
@@ -147,7 +177,7 @@
             id="photo-button"
             aria-label="Post a spot report"
           >
-            <img src="assets/icons/ui/camera-blue.svg" alt="" />
+            <img src="assets/icons/ui/camera.svg" alt="" />
           </button>
 
           <input
@@ -200,8 +230,7 @@
         </div>
         <div class="out-now-container">
           <div class="out-now-container-title">
-            <span class="dot"></span>
-            <span class="friends-count"
+            <span class="friend-count"
               ><b id="friend-total">6</b> friends on the water</span
             >
             <span class="spots-count"
@@ -210,7 +239,7 @@
           </div>
           <div class="friend-tiles">
             <a href="#" class="friend-tile">
-              <span class="friend-avatar" style="background: #1558e0">
+              <span class="friend-avatar" style="background: #1e5a73">
                 KA
                 <img
                   class="friend-badge"
@@ -332,7 +361,7 @@
             </div>
             <div class="spot-lower">
               <div class="spot-avatars">
-                <span class="mini-avatar" style="background: #1558e0">KA</span>
+                <span class="mini-avatar" style="background: #1e5a73">KA</span>
                 <span class="mini-avatar" style="background: #e04f15">PJ</span>
                 <span class="mini-avatar" style="background: #5b49c9">JL</span>
                 <span class="mini-more">+4</span>
@@ -368,7 +397,7 @@
             <div class="spot-lower">
               <div class="spot-avatars">
                 <span class="mini-avatar" style="background: #0e7c86">PJ</span>
-                <span class="mini-avatar" style="background: #1558e0">KA</span>
+                <span class="mini-avatar" style="background: #1e5a73">KA</span>
               </div>
               <span class="spot-here">2 here now · 1 friends</span>
               <img src="assets/icons/ui/chevron-right-blue.svg" alt="" />
@@ -546,7 +575,7 @@
 
       <div class="done-friends">
         <div class="spot-avatars">
-          <span class="mini-avatar" style="background: #1558e0">KA</span>
+          <span class="mini-avatar" style="background: #1e5a73">KA</span>
           <span class="mini-avatar" style="background: #e04f15">PJ</span>
           <span class="mini-avatar" style="background: #5b49c9">JL</span>
         </div>
@@ -578,8 +607,8 @@
     </dialog>
     <script src="script.js"></script>
     <script src="motion.js"></script>
+    <footer>
+      <p>Weather data by Open-Meteo.com</p>
+    </footer>
   </body>
-  <footer>
-    <p>Weather data by Open-Meteo.com</p>
-  </footer>
 </html>

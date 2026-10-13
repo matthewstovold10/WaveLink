@@ -19,17 +19,21 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="motion.css" />
-    <link rel="icon" href="assets/logo/favicon/favicon.ico" sizes="any" />
     <link
       rel="icon"
-      href="assets/logo/favicon/favicon.svg"
+      href="assets/wavelink-logo-files/favicon.ico"
+      sizes="any"
+    />
+    <link
+      rel="icon"
+      href="assets/wavelink-logo-files/favicon.svg"
       type="image/svg+xml"
     />
     <link
       rel="apple-touch-icon"
-      href="assets/logo/favicon/apple-touch-icon.png"
+      href="assets/wavelink-logo-files/apple-touch-icon.png"
     />
-    <meta name="theme-color" content="#eaf1fc" />
+    <meta name="theme-color" content="#e2e8e5" />
   </head>
 
   <body data-spot="beadnell">
@@ -58,22 +62,55 @@
           Check out
         </button>
       </div>
+      <div class="sport-picker-site">
+        <span class="sport-site-icon">
+          <img src="assets/icons/activity/wing.svg" alt="" />
+        </span>
+
+        <div class="sport-site-text">
+          <span class="sport-site">Wingfoiling</span>
+          <span class="sport-site-description">
+            Verdicts and numbers set for <b>wing</b>
+          </span>
+        </div>
+
+        <div class="sport-change">
+          <span aria-hidden="true">Change</span>
+          <span class="sport-change-arrow">
+            <img src="assets/icons/ui/chevron-down.svg" alt="" />
+          </span>
+          <select id="sport" name="sport" aria-label="Change sport">
+            <option value="wing">Wing</option>
+            <option value="surf">Surf</option>
+            <option value="kite">Kite</option>
+            <option value="sup">SUP</option>
+            <option value="kayak">Kayak</option>
+          </select>
+        </div>
+      </div>
       <section class="condition-near-site">
         <div class="condition-near-title">
           <img
             alt=""
-            src="assets/icons/nav/map-blue.svg"
+            src="assets/icons/nav/map.svg"
             class="condition-near-icon"
           />
           <span class="location">Current Conditions</span>
-          <span class="time">Now 14:20</span>
+          <span class="spot-verdict verdict--good" id="hero-verdict">Good</span>
         </div>
         <div class="hero-main">
           <div class="hero-wind">
             <span class="hero-number" id="hero-value">23</span>
             <div class="hero-unit">
               <span id="hero-unit">mph</span>
-              <span class="hero-dir" id="hero-dir">SE</span>
+              <span class="hero-dir-row">
+                <span
+                  class="hero-arrow"
+                  id="hero-arrow"
+                  aria-hidden="true"
+                ></span>
+                <span class="hero-dir" id="hero-dir">SE</span>
+              </span>
             </div>
           </div>
           <div class="hero-gusts">
@@ -114,41 +151,60 @@
             </div>
           </div>
         </div>
-        <div class="lower-weather">
-          <img src="assets/icons/ui/sun-grey.svg" alt="" />
-          <span class="weather-desc-1">Bright spells</span>
-          <span class="weather-desc-2">16°C</span>
-          <span class="weather-desc-3">Sunset 19:48</span>
+        <div class="tide">
+          <div class="tide-head">
+            <span class="tide-title">Tide <span id="tide-state">—</span></span>
+            <span class="tide-next" id="tide-next"></span>
+          </div>
+
+          <div class="tide-chart-wrap">
+            <svg
+              class="tide-chart"
+              viewBox="0 0 300 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path class="tide-fill" id="tide-fill" />
+              <path
+                class="tide-line"
+                id="tide-line"
+                vector-effect="non-scaling-stroke"
+              />
+            </svg>
+            <span class="tide-dot" id="tide-dot" hidden></span>
+            <span class="tide-now-label" id="tide-now-label" hidden>Now</span>
+          </div>
+
+          <div class="tide-labels" id="tide-labels"></div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="check-in-button">
+            <img src="assets/icons/ui/check-in-white.svg" alt="" />
+            Check in
+          </button>
+          <button
+            type="button"
+            class="cam-button"
+            id="photo-button-site"
+            aria-label="Post a spot report"
+          >
+            <img src="assets/icons/ui/camera.svg" alt="" />
+          </button>
+
+          <input
+            type="file"
+            id="photo-input-site"
+            accept="image/*,video/*"
+            capture="environment"
+            class="visually-hidden"
+          />
+          <button type="button" class="group-chat-button">
+            <img src="assets/icons/ui/chat.svg" alt="" />
+          </button>
         </div>
       </section>
-      <div class="hero-actions">
-        <button type="button" class="check-in-button">
-          <img src="assets/icons/ui/check-in-white.svg" alt="" />
-          Check in
-        </button>
-        <button
-          type="button"
-          class="cam-button"
-          id="photo-button-site"
-          aria-label="Post a spot report"
-        >
-          <img src="assets/icons/ui/camera-blue.svg" alt="" />
-        </button>
-
-        <input
-          type="file"
-          id="photo-input-site"
-          accept="image/*,video/*"
-          capture="environment"
-          class="visually-hidden"
-        />
-        <button type="button" class="group-chat-button">
-          <img src="assets/icons/ui/chat-blue.svg" alt="" />
-        </button>
-      </div>
       <section class="site-people-here">
         <div class="site-people-header">
-          <span class="dot"></span>
           <h2><b>7</b> people here now</h2>
           <a href="whos-here.html" class="see-who">
             See who
@@ -157,7 +213,7 @@
         </div>
         <div class="site-people-main">
           <div class="spot-avatars">
-            <span class="mini-avatar" style="background: #1558e0">KA</span>
+            <span class="mini-avatar" style="background: #1e5a73">KA</span>
             <span class="mini-avatar" style="background: #e04f15">PJ</span>
             <span class="mini-avatar" style="background: #5b49c9">JL</span>
             <span class="mini-more">+4</span>
@@ -343,7 +399,7 @@
 
       <div class="done-friends">
         <div class="spot-avatars">
-          <span class="mini-avatar" style="background: #1558e0">KA</span>
+          <span class="mini-avatar" style="background: #1e5a73">KA</span>
           <span class="mini-avatar" style="background: #e04f15">PJ</span>
           <span class="mini-avatar" style="background: #5b49c9">JL</span>
         </div>
