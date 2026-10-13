@@ -326,7 +326,7 @@ const ACTIVITIES = {
     ],
     verdict: (s) => {
       const spread = s.gust - s.wind;
-      if (s.wind >= 18) {
+      if (s.wind >= 15) {
         return spread >= 12
           ? ["Gusty for wing", "moderate"]
           : ["Good for wing", "good"];
